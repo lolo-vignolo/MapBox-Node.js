@@ -65,10 +65,14 @@ const main = async () => {
         console.clear();
         console.log(`\n===============================`.green);
         console.log('\n historial de busquedas: \n');
-        const listHitorial = busqueda.historial;
-        listHitorial.forEach((place, i) => {
-          const idx = `${i + 1}.`.green;
-          console.log(`${idx}. ${place}`);
+        await busqueda.cargarDB();
+        const arrayplaces = busqueda.historial;
+        arrayplaces.map((place, i) => {
+          let upperPlacer = place.split(' ').map((p) => {
+            return p[0].toUpperCase() + p.slice(1);
+          });
+          const idx = `${i + 1}`.green;
+          return console.log(`${idx} ${upperPlacer.join(' ')}`);
         });
 
         break;

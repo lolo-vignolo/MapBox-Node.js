@@ -1,10 +1,14 @@
+const fs = require('fs');
 require('dotenv').config();
 const axios = require('axios');
 
 class Busquedas {
-  constructor() {}
+  historial = [];
 
-  historial = ['castelar', 'New York', 'Tokyo'];
+  pathDB = './db/database.json';
+  constructor() {
+    this.cargarDB();
+  }
 
   async ciudad(lugar = '') {
     //peticios HTTP
@@ -58,6 +62,23 @@ class Busquedas {
   async guardarHistorial(ciudad = '') {
     if (this.historial.includes(ciudad.toLocaleLowerCase())) return;
     this.historial.unshift(ciudad.toLocaleLowerCase());
+    await this.guardarDB();
+  }
+  async guardarDB() {
+    const payload = this.historial;
+    fs.writeFileSync(this.pathDB, JSON.stringify(payload)),
+      (err) => {
+        if (err) throw err;
+      };
+  }
+
+  async cargarDB() {
+    if (!fs.existsSync('./db/database.json')) {
+      return null;
+    }
+    const data = fs.readFileSync(this.pathDB, 'utf-8');
+    const dataJSON = JSON.parse(data);
+    this.historial = dataJSON;
   }
 }
 
