@@ -61,6 +61,7 @@ class Busquedas {
 
   async guardarHistorial(ciudad = '') {
     if (this.historial.includes(ciudad.toLocaleLowerCase())) return;
+    this.historial = this.historial.slice(0, 5);
     this.historial.unshift(ciudad.toLocaleLowerCase());
     await this.guardarDB();
   }
